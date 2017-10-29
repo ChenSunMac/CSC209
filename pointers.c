@@ -9,10 +9,10 @@
  *  - Function Pointer : address of the function code entry
  */
 
-void fun(int a)
-{
-    printf("Value of a is %d\n", a);
-}
+// void fun(int a)
+// {
+//     printf("Value of a is %d\n", a);
+// }
 
 int main()
 {
