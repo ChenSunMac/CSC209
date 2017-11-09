@@ -38,24 +38,36 @@
 
  DONE: (0) Since it read in file from stdin, so what it takes in should be (FILE *)
  */
-Bitmap *read_header(FILE *filename) {
-    FILE *filePtr;              //our file pointer
-    // if the input is not from global variable (stdin)
-    if (filename != stdin) {
-        fprintf(stderr, "No available files\n");
-        exit(EXIT_FAILURE);
+Bitmap *read_header() {
+    FILE *img;
+    img = fopen("dog.bmp", "rb");
+    if (img == NULL){
+        printf("Error: fopen failed\n");
+        return NULL; 
     }
-    // the real stuff here:
-    else{
-        filePtr = fopen(filename,"rb");
-        if (filePtr == NULL){
-            fprintf(stderr, "empty file here\n");
-            exit(EXIT_FAILURE);
-        }
-        fread(&HeaderData, sizeof(theSize),1,filePtr);
-    }
+    Bitmap *bmp = malloc(sizeof(Bitmap));
 
-    return NULL;
+    // BMP header size offset
+    fseek(img, BMP_HEADER_SIZE_OFFSET, SEEK_SET);
+    fread(&(bmp->headerSize), 1, 4, img);
+
+    // read header 
+    bmp->header = malloc(sizeof(char)*bmp->headerSize);
+    int char_read;
+    char_read = fread(bmp->header, sizeof(char), bmp->headerSize, img);
+
+    printf("the char_read in to bmp struct has %d chars\n", char_read);
+
+    // Capture dimensions
+    fseek(img, BMP_WIDTH_OFFSET, SEEK_SET);
+    fread(&(bmp->width), 1, 4, img);
+    fseek(img, BMP_HEIGHT_OFFSET, SEEK_SET);
+    fread(&(bmp->height), 1, 4, img);
+    
+    printf("the width is %d \n", bmp->width);
+
+    printf("the height is %d \n", bmp->height);
+    return bmp;
 }
 
 /*
