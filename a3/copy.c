@@ -14,6 +14,24 @@
  */
 void copy_filter(Bitmap *bmp) {
     // TODO: Complete this function.
+    /* 
+    FILE *out; // in this case stdout
+    // read from header file
+	data = (char*)malloc(sizeof(char)* 3 * width * height);
+    if(data == NULL){
+        //cleanup
+    }
+
+    fseek(fp,sizeof(char)*hp->fileheader.dataoffset,SEEK_SET);
+    n=fread(data,sizeof(char),hp->bitmapsize, fp);
+    if(n<1){
+        //cleanup
+    }
+
+    fwrite(data,sizeof(char),hp->bitmapsize,out);
+	fclose(..)
+	free(..)
+    */
 }
 
 int main() {

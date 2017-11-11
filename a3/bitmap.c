@@ -35,9 +35,42 @@
  *   4. You can use either fread/fwrite or read/write to perform I/O operations here.
  *
  *   5. Make good use of the provided macros in bitmap.h to index into the "header" array.
+ 
+ */
+
+/*
+stdin is a stream, (redirected as input here)
+We can Sets the position indicator associated with the stream to a new position.
+in order to parse specific data from header
+int fseek ( FILE * stream, long int offset, int origin );
+Use fread() to read from stream
+size_t fread ( void * ptr, size_t size, size_t count, FILE * stream );
+...
  */
 Bitmap *read_header() {
-    return NULL;
+
+    Bitmap *bmp = malloc( sizeof( Bitmap ) );
+
+    // the header size
+    fseek(stdin, BMP_HEADER_SIZE_OFFSET, 0);
+    fread(&(bmp->headerSize), 1, 4, stdin);
+
+    printf("now the header size is %d \n", bmp->headerSize);
+
+    // the header 
+    unsigned char *header_data = malloc(bmp->headerSize);
+    fseek(stdin, 0, 0);
+    fread(&(header_data), 1, bmp->headerSize, stdin);
+
+    // the BMP_WIDTH_OFFSET 
+    fseek(stdin, BMP_WIDTH_OFFSET, 0);
+    fread(&(bmp->width), 1, 4, stdin);
+
+    // the BMP_HEIGHT_OFFSET 
+    fseek(stdin, BMP_WIDTH_OFFSET, 0);
+    fread(&(bmp->height), 1, 4, stdin);
+
+    return bmp;
 }
 
 /*
@@ -88,10 +121,11 @@ void run_filter(void (*filter)(Bitmap *), int scale_factor) {
         scale(bmp, scale_factor);
     }
 
+
     write_header(bmp);
 
-    // Note: here is where we call the filter function.
-    filter(bmp);
+    // // Note: here is where we call the filter function.
+    // filter(bmp);
 
     free_bitmap(bmp);
 }

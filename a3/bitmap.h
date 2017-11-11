@@ -22,7 +22,7 @@ typedef struct {
 } Bitmap;
 
 
-void run_filter(void (*filter)(), int scale_factor);
+void run_filter(void (*filter)(Bitmap *), int scale_factor);
 
 
 // Macros and functions for performing the two multi-row filters.
