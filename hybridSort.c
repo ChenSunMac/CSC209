@@ -52,7 +52,7 @@ int partition (int arr[], int low, int high)
 void quicksort(int * tab, int l, int r)
 {
    int q;
-   while(l < r)
+   while(l < r - 10)
    {
       q = partition(tab, l, r);
       if(q - l < r - q) //recurse into the smaller half
@@ -66,6 +66,7 @@ void quicksort(int * tab, int l, int r)
       }
    }
 }
+
 
 /* Function to print an array */
 void printArray(int arr[], int size)
@@ -81,7 +82,7 @@ int main()
 {
     int arr[] = {10, 7, 8, 9, 1, 5,1,3,4,4,6,7,8,9,13,22,34,12,24,12,3,512,1};
     int n = sizeof(arr)/sizeof(arr[0]);
-    quicksort(arr, 0, n-1);
+    qsort4(arr, 0, n-1);
     printf("Sorted array: n");
     printArray(arr, n);
     return 0;
