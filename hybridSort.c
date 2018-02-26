@@ -1,8 +1,9 @@
 #include<stdio.h>
 
 
-void insertionSort(int arr[], int low， int high){
-	for (int x = low + 1; x < end ; x ++){
+void insertionSort(int arr[], int low, int high)
+{
+	for (int x = low + 1; x < high ; x ++){
 		int val = arr[x];
 		int j = x - 1;
 		while (j>=0 && val < arr[j]){
