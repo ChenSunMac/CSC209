@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 const int Num=50;  
-const int Scale=8;//小数组阀值 
+const int Scale=10;//小数组阀值 
 void exch(int* s,int a,int b)//交换  
 {  
         int mid=s[a];  
@@ -55,6 +55,7 @@ int QSort(int* s,int low,int up)//快速排序
                 exch(s,i,up);  
                 QSort(s,i,up-1);  
                 QSort(s,up+1,j);  
+                return 0;
         }  
 }  
   

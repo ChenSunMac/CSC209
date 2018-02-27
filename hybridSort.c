@@ -1,70 +1,72 @@
 #include<stdio.h>
+#include <stdlib.h>
 
+const int NUM = 50;
+const int LIMIT = 10;
 
-void insertionSort(int arr[], int low, int high)
-{
-	for (int x = low + 1; x < high ; x ++){
-		int val = arr[x];
-		int j = x - 1;
-		while (j>=0 && val < arr[j]){
-			arr[j + 1] = arr[j];
-			j--;
-		}
-		arr[j + 1] = val;
-	}
+// exchange the values of array by given indexes
+void exch_by_index(int* arr, int index1, int index2){ 
+  int temp = arr[index1];
+  arr[index1] = arr[index2];
+  arr[index2] = temp;
 }
 
-void swap(int* a, int* b)
-{
-    int t = *a;
-    *a = *b;
-    *b = t;
+// insert element in the back and move everything back one index
+void insert_element(int* arr, int element_index, int dest_index){
+  int temp = arr[element_index];
+  for (int i = element_index; i > dest_index; i--){
+    arr[i] = arr[i - 1];
+  }
+  arr[dest_index] = temp;
 }
- 
-/* This function takes last element as pivot, places
-   the pivot element at its correct position in sorted
-    array, and places all smaller (smaller than pivot)
-   to left of pivot and all greater elements to right
-   of pivot */
-int partition (int arr[], int low, int high)
-{
-    int pivot = arr[high];    // pivot
-    int i = (low - 1);  // Index of smaller element
- 
-    for (int j = low; j <= high- 1; j++)
-    {
-        // If current element is smaller than or
-        // equal to pivot
-        if (arr[j] <= pivot)
-        {
-            i++;    // increment index of smaller element
-            swap(&arr[i], &arr[j]);
-        }
-    }
-    swap(&arr[i + 1], &arr[high]);
-    return (i + 1);
-}
- 
-/* The main function that implements QuickSort
- arr[] --> Array to be sorted,
-  low  --> Starting index,
-  high  --> Ending index */
-void quicksort(int * tab, int l, int r)
-{
-   int q;
-   while(l < r - 10)
-   {
-      q = partition(tab, l, r);
-      if(q - l < r - q) //recurse into the smaller half
-      {
-         quicksort(tab, l, q - 1);
-         l = q + 1;
-      } else
-      {
-         quicksort(tab, q + 1, r);
-         r = q - 1;
-      }
-   }
+
+
+// insertion sort
+void InsertSort(int* s,int low,int up){  
+        for(int i=low+1;i<=up;i++)  
+        {  
+                for(int j=low;j<i;j++)  
+                {  
+                        if(s[i]<s[j])  
+                                insert_element(s,i,j);  
+                }  
+        }  
+}  
+// quick sort 
+int QSort(int* s,int low,int up)//快速排序  
+{  
+        if(up <= low+LIMIT)//是小数组时采用插入排序  
+        {  
+            InsertSort(s,low,up);  
+            return 0;  
+        }  
+        else  
+        {  
+                int key=s[low];  
+                int i=low;  
+                int j=up;  
+                up++;  
+                while(low<up)  
+                {  
+                        low++;  
+                        while(low<up&&s[low]<=key)  
+                                low++;  
+                        up--;  
+                        while(low<=up&&s[up]>=key)  
+                                up--;  
+                        if(low<up)  
+                                exch_by_index(s,low,up);  
+                }  
+                exch_by_index(s,i,up);  
+                QSort(s,i,up-1);  
+                QSort(s,up+1,j);  
+                return 0;
+        }  
+}  
+
+
+void sort(int *arr_ptr, int arr_sz){
+  QSort(arr_ptr,0,arr_sz - 1);
 }
 
 
@@ -76,14 +78,24 @@ void printArray(int arr[], int size)
         printf("%d ", arr[i]);
     printf("n");
 }
- 
 // Driver program to test above functions
 int main()
 {
-    int arr[] = {10, 7, 8, 9, 1, 5,1,3,4,4,6,7,8,9,13,22,34,12,24,12,3,512,1};
-    int n = sizeof(arr)/sizeof(arr[0]);
-    qsort4(arr, 0, n-1);
-    printf("Sorted array: n");
-    printArray(arr, n);
-    return 0;
+        int array[NUM];  
+        srand(2);//initialize  random number   
+        for(int i=0;i<NUM;i++)//from 1 - 100
+        {  
+                array[i]=rand() % 101;  
+        }  
+        for(int i=0;i<NUM;i++)//output number array
+        {  
+                printf("%d ",array[i]);  
+        }  
+        sort(array,NUM);  
+        printf("\n");  
+        for(int i=0;i<NUM;i++)  
+        {  
+                printf("%d ",array[i]);  
+        }  
+    return 0;  
 }
