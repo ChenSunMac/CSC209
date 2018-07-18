@@ -1,7 +1,9 @@
 /*
-** selectserver.c -- a cheezy multiperson chat server
-* telnet hostname 9034
-*/
+ * selectserver.c -- a simple multi-person chat server
+ * 
+ * telnet hostname 9034
+ * Chen S.
+ */
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -27,11 +29,11 @@ void *get_in_addr(struct sockaddr *sa)
 
 int main(void)
 {
-    fd_set master;    // master file descriptor list
-    fd_set read_fds;  // temp file descriptor list for select()
+    fd_set master;    // 主监听fd list
+    fd_set read_fds;  // 监听可读的fd list
     int fdmax;        // maximum file descriptor number
 
-    int listener;     // listening socket descriptor
+    int listener;     // listening socket descriptor 
     int newfd;        // newly accept()ed socket descriptor
     struct sockaddr_storage remoteaddr; // client address
     socklen_t addrlen;
@@ -46,7 +48,8 @@ int main(void)
 
 	struct addrinfo hints, *ai, *p;
 
-    FD_ZERO(&master);    // clear the master and temp sets
+    // 初始化 FD sets
+    FD_ZERO(&master);  
     FD_ZERO(&read_fds);
 
 	// get us a socket and bind it
@@ -54,18 +57,19 @@ int main(void)
 	hints.ai_family = AF_UNSPEC;
 	hints.ai_socktype = SOCK_STREAM;
 	hints.ai_flags = AI_PASSIVE;
+
 	if ((rv = getaddrinfo(NULL, PORT, &hints, &ai)) != 0) {
 		fprintf(stderr, "selectserver: %s\n", gai_strerror(rv));
 		exit(1);
 	}
-	
+	// Socket（） and Bind（）
 	for(p = ai; p != NULL; p = p->ai_next) {
     	listener = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
 		if (listener < 0) { 
 			continue;
 		}
 		
-		// lose the pesky "address already in use" error message
+		// Handle "address already in use" error message 可以不用
 		setsockopt(listener, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int));
 
 		if (bind(listener, p->ai_addr, p->ai_addrlen) < 0) {
@@ -76,7 +80,7 @@ int main(void)
 		break;
 	}
 
-	// if we got here, it means we didn't get bound
+	// handle没bind好的情况
 	if (p == NULL) {
 		fprintf(stderr, "selectserver: failed to bind\n");
 		exit(2);
